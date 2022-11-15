@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "strict": true,
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
+
+  },
+  "lib": [
+    "ES2020.Promise",
+  ],
+  "include": [
+    ".",
+    "src/**/*.vue",
+  ],
+  "exclude": [
+    "node_modules",
+    ".vscode"
+  ]
+}
