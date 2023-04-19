@@ -50,7 +50,7 @@ export const COLOR_THEMES = [
       success: '#76E18D',
       info: '#2c82e0',
       danger: '#e34b4a',
-      warning: '#ffc200',
+      warning: 'black',
     },
   },
 ]

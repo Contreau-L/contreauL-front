@@ -1,16 +1,17 @@
 {
   "auth": {
-    "agree": "I agree to",
     "createAccount": "Create account",
-    "createNewAccount": "Create New Account",
+    "createNewAccount": "S'inscrire",
+    "name": "Prenom",
     "email": "Email",
-    "login": "Login",
-    "password": "Password",
-    "recover_password": "Recover password",
-    "sign_up": "Sign Up",
+    "login": "Connexion",
+    "newLogin": "Se connecter",
+    "password": "Mot de passe",
+    "recover_password": "Mot de passe oublié",
+    "sign_up": "Inscription",
     "keep_logged_in": "Keep me logged in",
     "termsOfUse": "Terms of Use.",
-    "reset_password": "Reset password"
+    "reset_password": "Réinitialisation du mot de passe"
   },
   "404": {
     "title": "This page’s gone fishing.",
@@ -298,7 +299,7 @@
     "colorPickers": "Color Pickers",
     "collapses": "Collapses",
     "timelines": "Timelines",
-    "dashboard": "Dashboard",
+    "dashboard": "Tableau de bord",
     "formElements": "Form Elements",
     "forms": "Forms",
     "mediumEditor": "Medium Editor",
@@ -313,7 +314,7 @@
     "notifications": "Notifications",
     "progressBars": "Progress Bars",
     "signUp": "Sign up",
-    "statistics": "Statistics",
+    "statistics": "Statistiques",
     "lists": "Lists",
     "tables": "Tables",
     "markupTables": "Markup Tables",

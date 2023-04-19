@@ -5,6 +5,8 @@ export const useGlobalStore = defineStore('global', {
     return {
       isSidebarMinimized: false,
       userName: 'Vasili S',
+      token: '',
+      api_url: window.API_URL ? window.API_URL : "",
     }
   },
 
@@ -13,8 +15,18 @@ export const useGlobalStore = defineStore('global', {
       this.isSidebarMinimized = !this.isSidebarMinimized
     },
 
-    changeUserName(userName: string) {
+    setUserName(userName: string) {
       this.userName = userName
     },
+
+    setToken(token: string): void {
+      this.token = token
+    }
   },
+
+  getters:  {
+    isTokenAlreadySet(): boolean {
+      return this.token.length > 0;
+    }
+  }
 })

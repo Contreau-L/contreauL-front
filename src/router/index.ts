@@ -10,12 +10,13 @@ import UIRoute from '../pages/admin/ui/route'
 const routes: Array<RouteRecordRaw> = [
   {
     path: '/:catchAll(.*)',
-    redirect: { name: 'dashboard' },
+    redirect: { name: 'login' },
   },
   {
     name: 'admin',
     path: '/admin',
     component: AppLayout,
+    redirect: {name: 'dashboard'},
     children: [
       {
         name: 'dashboard',
@@ -161,6 +162,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/auth',
     component: AuthLayout,
+    name: 'auth',
     children: [
       {
         name: 'login',
@@ -213,8 +215,7 @@ const routes: Array<RouteRecordRaw> = [
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  //  mode: process.env.VUE_APP_ROUTER_MODE_HISTORY === 'true' ? 'history' : 'hash',
   routes,
 })
 
-export default router
+export default router;

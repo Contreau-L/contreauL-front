@@ -1,28 +1,30 @@
 <template>
-  <form @submit.prevent="onsubmit">
+  <form @submit.prevent="onsubmit" @keyup.enter="onsubmit">
     <va-input
-      v-model="email"
+      v-model="formData.email"
       class="mb-3"
       type="email"
       :label="t('auth.email')"
       :error="!!emailErrors.length"
       :error-messages="emailErrors"
+      :input-class=" emailErrors.length ? 'textError' : ''"
     />
 
     <va-input
-      v-model="password"
+      v-model="formData.password"
       class="mb-3"
       type="password"
       :label="t('auth.password')"
       :error="!!passwordErrors.length"
       :error-messages="passwordErrors"
+      :input-class=" passwordErrors.length ? 'textError' : ''"
     />
 
     <div class="auth-layout__options d-flex align-center justify-space-between">
-      <va-checkbox v-model="keepLoggedIn" class="mb-0" :label="t('auth.keep_logged_in')" />
       <router-link class="ml-1 va-link" :to="{ name: 'recover-password' }">{{
-        t('auth.recover_password')
-      }}</router-link>
+          t('auth.recover_password')
+        }}
+      </router-link>
     </div>
 
     <div class="d-flex justify-center mt-3">
@@ -32,26 +34,84 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref } from 'vue'
-  import { useRouter } from 'vue-router'
-  import { useI18n } from 'vue-i18n'
-  const { t } = useI18n()
+import {computed, onBeforeMount, reactive, ref} from 'vue'
+import {useRouter} from 'vue-router'
+import {useI18n} from 'vue-i18n'
+import {ReactiveVariable} from "vue/macros";
+import {UserLogin} from "./services/dtt";
+import {loginUser} from "./services/loginService";
+import {useGlobalStore} from "../../../stores/global-store";
+import {useToast} from "vuestic-ui";
+import {getToken, getUsername, storeTokenAndUsername} from "../../../utils/cookieManagement";
 
-  const email = ref('')
-  const password = ref('')
-  const keepLoggedIn = ref(false)
-  const emailErrors = ref<string[]>([])
-  const passwordErrors = ref<string[]>([])
-  const router = useRouter()
+const {t} = useI18n()
 
-  const formReady = computed(() => !emailErrors.value.length && !passwordErrors.value.length)
+const formData: ReactiveVariable<UserLogin> = reactive({
+  email: "",
+  password: ""
+})
+const emailErrors = ref<string[]>([])
+const passwordErrors = ref<string[]>([])
 
-  function onsubmit() {
-    if (!formReady.value) return
+const formReady = computed(() => {
+  return (formData.email!.length > 0 && formData.password!.length > 0)
+})
 
-    emailErrors.value = email.value ? [] : ['Email is required']
-    passwordErrors.value = password.value ? [] : ['Password is required']
+const router = useRouter();
+const store = useGlobalStore();
 
-    router.push({ name: 'dashboard' })
+function onsubmit() {
+  if (!formReady.value) {
+    emailErrors.value = formData.email ? [] : ["L'email est obligatoire"]
+    passwordErrors.value = formData.password ? [] : ['Le mot de passe est obligatoire']
+  } else {
+    loginUser(formData).then((user: UserLogin) => {
+      store.setToken(user.token!);
+      store.setUserName(user.name!);
+      storeTokenAndUsername(user.token!, user.name!);
+      notifySuccess();
+      router.push("/admin");
+    }).catch(() => notifyError());
   }
+}
+
+const {init} = useToast();
+
+function notifySuccess() {
+  init({
+    message: "Connexion réalisée avec succès",
+    position: 'top-right',
+    duration: 3000,
+    color: "info",
+  })
+}
+
+function notifyError() {
+  init({
+    message: "Problème rencontré lors de la connexion",
+    position: 'top-right',
+    duration: 3000,
+    color: "danger",
+  })
+}
+
+onBeforeMount(() => {
+  if (!useGlobalStore().isTokenAlreadySet) {
+    if (getUsername() && getToken()) {
+      store.setUserName(getUsername()!);
+      store.setToken(getToken()!)
+    }
+    else
+      return
+  }
+  useRouter().push('/admin');
+})
 </script>
+
+<style lang="scss">
+.textError {
+  &.va-input__content__input {
+    color: black !important;
+  }
+}
+</style>

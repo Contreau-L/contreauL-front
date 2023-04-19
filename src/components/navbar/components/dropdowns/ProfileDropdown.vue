@@ -9,9 +9,9 @@
       </template>
       <va-dropdown-content class="profile-dropdown__content">
         <va-list-item v-for="option in options" :key="option.name" class="pa-2">
-          <router-link :to="{ name: option.redirectTo }" class="profile-dropdown__item">
+          <span @click="logoutUser()" class="profile-dropdown__item">
             {{ t(`user.${option.name}`) }}
-          </router-link>
+          </span>
         </va-list-item>
       </va-dropdown-content>
     </va-dropdown>
@@ -22,6 +22,9 @@
   import { ref } from 'vue'
   import { useI18n } from 'vue-i18n'
   import { useColors } from 'vuestic-ui'
+  import {deleteCookie} from "../../../../utils/cookieManagement";
+  import {useRouter} from "vue-router";
+  import {useGlobalStore} from "../../../../stores/global-store";
 
   const { t } = useI18n()
   const { colors } = useColors()
@@ -45,6 +48,16 @@
   )
 
   const isShown = ref(false)
+  const router = useRouter();
+  const store = useGlobalStore();
+
+  const logoutUser = () => {
+    deleteCookie('token');
+    deleteCookie('username');
+    store.setUserName('');
+    store.setToken('')
+    router.push('/auth')
+  }
 </script>
 
 <style lang="scss" scoped>
