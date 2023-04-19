@@ -25,14 +25,14 @@
 <script setup>
   import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
   import { storeToRefs } from 'pinia'
-  import { onBeforeRouteUpdate } from 'vue-router'
+  import {onBeforeRouteUpdate, useRouter} from 'vue-router'
 
   import { useGlobalStore } from '../stores/global-store'
 
   import Navbar from '../components/navbar/Navbar.vue'
   import Sidebar from '../components/sidebar/Sidebar.vue'
 
-  const GlobalStore = useGlobalStore()
+  const GlobalStore = useGlobalStore();
 
   const mobileBreakPointPX = 640
   const tabletBreakPointPX = 768
@@ -56,7 +56,10 @@
   }
 
   onMounted(() => {
-    window.addEventListener('resize', onResize)
+    window.addEventListener('resize', onResize);
+    if (!GlobalStore.isTokenAlreadySet) {
+      useRouter().push('/auth');
+    }
   })
 
   onBeforeUnmount(() => {

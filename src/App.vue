@@ -6,7 +6,6 @@
 import {useColors} from "vuestic-ui";
 
 useColors().applyPreset("original")
-console.log(useColors().presets.value.light)
 
 </script>
 
