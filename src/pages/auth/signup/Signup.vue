@@ -74,10 +74,20 @@ const formReady = computed(() => {
 const router = useRouter();
 const store = useGlobalStore();
 
+function emailValidation(): Array<string> {
+  if (!formData.email) {
+    return ["L'email est obligatoire"];
+  } else if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formData.email!)) {
+    return [];
+  } else {
+    return ["L'email n'est pas valide"];
+  }
+}
+
 function onsubmit(): void {
   if (!formReady.value) {
-    emailErrors.value = formData.email ? [] : ["L'email est obligatoire"]
-    passwordErrors.value = formData.password ? [] : ['Le mot de passe est obligatoire']
+    emailErrors.value = emailValidation();
+    passwordErrors.value = formData.password ? [] : ['Le mot de passe est obligatoire'];
     nameErrors.value = agreedToTerms.value ? [] : ['Le prenom est obligatoire'];
   } else {
     signupUser(formData).then((user: UserSignup) => {

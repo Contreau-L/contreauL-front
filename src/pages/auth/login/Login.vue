@@ -1,23 +1,23 @@
 <template>
   <form @submit.prevent="onsubmit" @keyup.enter="onsubmit">
     <va-input
-      v-model="formData.email"
-      class="mb-3"
-      type="email"
-      :label="t('auth.email')"
-      :error="!!emailErrors.length"
-      :error-messages="emailErrors"
-      :input-class=" emailErrors.length ? 'textError' : ''"
+        v-model="formData.email"
+        class="mb-3"
+        type="email"
+        :label="t('auth.email')"
+        :error="!!emailErrors.length"
+        :error-messages="emailErrors"
+        :input-class=" emailErrors.length ? 'textError' : ''"
     />
 
     <va-input
-      v-model="formData.password"
-      class="mb-3"
-      type="password"
-      :label="t('auth.password')"
-      :error="!!passwordErrors.length"
-      :error-messages="passwordErrors"
-      :input-class=" passwordErrors.length ? 'textError' : ''"
+        v-model="formData.password"
+        class="mb-3"
+        type="password"
+        :label="t('auth.password')"
+        :error="!!passwordErrors.length"
+        :error-messages="passwordErrors"
+        :input-class=" passwordErrors.length ? 'textError' : ''"
     />
 
     <div class="auth-layout__options d-flex align-center justify-space-between">
@@ -57,12 +57,22 @@ const formReady = computed(() => {
   return (formData.email!.length > 0 && formData.password!.length > 0)
 })
 
+function emailValidation(): Array<string> {
+  if (!formData.email) {
+    return ["L'email est obligatoire"];
+  } else if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formData.email!)) {
+    return [];
+  } else {
+    return ["L'email n'est pas valide"];
+  }
+}
+
 const router = useRouter();
 const store = useGlobalStore();
 
 function onsubmit() {
   if (!formReady.value) {
-    emailErrors.value = formData.email ? [] : ["L'email est obligatoire"]
+    emailErrors.value = emailValidation();
     passwordErrors.value = formData.password ? [] : ['Le mot de passe est obligatoire']
   } else {
     loginUser(formData).then((user: UserLogin) => {
@@ -100,8 +110,7 @@ onBeforeMount(() => {
     if (getUsername() && getToken()) {
       store.setUserName(getUsername()!);
       store.setToken(getToken()!)
-    }
-    else
+    } else
       return
   }
   useRouter().push('/admin');
