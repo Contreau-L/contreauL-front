@@ -19,7 +19,7 @@
     width: 200px;
     height: 100px;
     position: fixed;
-    top: 40%;
+    top: 50%;
     left: calc(50% - 100px);
     z-index: 1000;
     display: inline-flex;

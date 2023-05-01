@@ -46,7 +46,7 @@ import {UserSignup} from "./services/dtt";
 import {signupUser} from "./services/signupService";
 import {useToast} from "vuestic-ui";
 import {useGlobalStore} from "../../../stores/global-store";
-import {storeTokenAndUsername} from "../../../utils/cookieManagement";
+import {setUserCookies} from "../../../utils/cookieManagement";
 
 const {t} = useI18n()
 
@@ -87,7 +87,8 @@ function onsubmit(): void {
     signupUser(formData).then((user: UserSignup) => {
       store.setToken(user.token!);
       store.setUserName(user.name);
-      storeTokenAndUsername(user.token!, user.name!);
+      store.setUserId(user.id!);
+      setUserCookies(user.token!, user.name!, user.id!);
       notifySuccess("Inscription réalisée avec succès !");
       document.dispatchEvent(new Event('loading'));
       router.push("/admin")

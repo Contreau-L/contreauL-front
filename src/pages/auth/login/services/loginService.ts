@@ -7,6 +7,6 @@ export function loginUser(user: UserLogin): Promise<UserLogin> {
     password: user.password,
     email: user.email
   }).then((response) => {
-    return {name: response.data.name, token: response.data.token}
+    return {name: response.data.name, token: response.data.token, id: response.data.id}
   })
 }

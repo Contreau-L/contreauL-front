@@ -25,9 +25,10 @@ export function deleteCookie(name: string): void {
   document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
 }
 
-export function storeTokenAndUsername(token: string, userName: string): void {
+export function setUserCookies(token: string, userName: string, id: string): void {
   setCookie('token', token, 12);
   setCookie('username', userName, 12);
+  setCookie('id', id, 12);
 }
 
 export function getToken(): string | null {
@@ -36,6 +37,10 @@ export function getToken(): string | null {
 
 export function getUsername(): string | null {
   return getCookie('username');
+}
+
+export function getUserId(): string | null {
+  return getCookie('id');
 }
 
 export function deleteTokenAndUsername(): void {

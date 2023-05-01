@@ -35,7 +35,7 @@ import {UserLogin} from "./services/dtt";
 import {loginUser} from "./services/loginService";
 import {useGlobalStore} from "../../../stores/global-store";
 import {useToast} from "vuestic-ui";
-import {getToken, getUsername, storeTokenAndUsername} from "../../../utils/cookieManagement";
+import {getToken, getUserId, getUsername, setUserCookies} from "../../../utils/cookieManagement";
 
 const {t} = useI18n()
 
@@ -71,7 +71,8 @@ function onsubmit() {
     loginUser(formData).then((user: UserLogin) => {
       store.setToken(user.token!);
       store.setUserName(user.name!);
-      storeTokenAndUsername(user.token!, user.name!);
+      store.setUserId(user.id!);
+      setUserCookies(user.token!, user.name!, user.id!);
       notifySuccess("Connexion réalisée avec succès");
       document.dispatchEvent(new Event('loading'));
       router.push("/admin");
@@ -100,9 +101,10 @@ function notifyError(error: string) {
 
 onBeforeMount(() => {
   if (!useGlobalStore().isTokenAlreadySet) {
-    if (getUsername() && getToken()) {
+    if (getUsername() && getToken() && getUserId()) {
       store.setUserName(getUsername()!);
       store.setToken(getToken()!)
+      store.setUserId(getUserId()!)
     } else
       return
   }

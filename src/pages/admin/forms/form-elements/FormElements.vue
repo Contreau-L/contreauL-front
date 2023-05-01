@@ -8,16 +8,6 @@
             <form>
               <div class="row">
                 <div class="flex md4 sm6 xs12">
-                  <va-input v-model="simple" placeholder="Text Input" />
-                </div>
-                <div class="flex md4 sm6 xs12">
-                  <va-input v-model="withIcon" placeholder="Input With Icon">
-                    <template #prepend>
-                      <va-icon color="gray" name="envelope" />
-                    </template>
-                  </va-input>
-                </div>
-                <div class="flex md4 sm6 xs12">
                   <va-input v-model="withButton" placeholder="Input With Button">
                     <template #append>
                       <va-button style="margin-right: 0" small> UPLOAD </va-button>
@@ -252,11 +242,10 @@
 
 <script setup lang="ts">
   import { ref } from 'vue'
-  import CountriesList from '../data/CountriesList'
   import { useI18n } from 'vue-i18n'
   const { t } = useI18n()
 
-  const countriesList = ref(CountriesList)
+  const countriesList = ref()
   const chosenCountry = ref('')
   const simple = ref('')
   const withIcon = ref('')

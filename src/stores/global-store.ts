@@ -6,6 +6,7 @@ export const useGlobalStore = defineStore('global', {
       isSidebarMinimized: false,
       userName: '',
       token: '',
+      userId: '',
       api_url: window.API_URL ? window.API_URL : "",
       devices: []
     }
@@ -22,6 +23,10 @@ export const useGlobalStore = defineStore('global', {
 
     setToken(token: string): void {
       this.token = token
+    },
+
+    setUserId(id: string) {
+      this.userId = id
     },
 
     setDevices(devices: any) {

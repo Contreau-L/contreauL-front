@@ -14,6 +14,11 @@
       </div>
     </template>
     <template #right>
+      <div style="max-width: 300px;">
+          <va-select
+                  v-model="actualDevice"
+          />
+      </div>
       <app-navbar-actions class="app-navbar__actions md5 lg4" :user-name="userName"/>
     </template>
   </va-navbar>
@@ -38,6 +43,7 @@ const {getColors} = useColors()
 const colors = computed(() => getColors())
 const userName = ref(GlobalStore.userName);
 
+const actualDevice = ref("");
 </script>
 
 <style lang="scss" scoped>
