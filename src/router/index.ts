@@ -47,8 +47,8 @@ const routes: Array<RouteRecordRaw> = [
         ],
       },
       {
-        name: 'forms',
-        path: 'forms',
+        name: 'settings',
+        path: 'settings',
         component: RouteViewComponent,
         children: [
           {
@@ -173,11 +173,6 @@ const routes: Array<RouteRecordRaw> = [
         name: 'signup',
         path: 'signup',
         component: () => import('../pages/auth/signup/Signup.vue'),
-      },
-      {
-        name: 'recover-password',
-        path: 'recover-password',
-        component: () => import('../pages/auth/recover-password/RecoverPassword.vue'),
       },
       {
         path: '',

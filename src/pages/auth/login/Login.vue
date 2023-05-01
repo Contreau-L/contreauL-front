@@ -20,13 +20,6 @@
         :input-class=" passwordErrors.length ? 'textError' : ''"
     />
 
-    <div class="auth-layout__options d-flex align-center justify-space-between">
-      <router-link class="ml-1 va-link" :to="{ name: 'recover-password' }">{{
-          t('auth.recover_password')
-        }}
-      </router-link>
-    </div>
-
     <div class="d-flex justify-center mt-3">
       <va-button class="my-0" @click="onsubmit">{{ t('auth.login') }}</va-button>
     </div>
@@ -54,7 +47,7 @@ const emailErrors = ref<string[]>([])
 const passwordErrors = ref<string[]>([])
 
 const formReady = computed(() => {
-  return (formData.email!.length > 0 && formData.password!.length > 0)
+  return (formData.email!.length > 0 && formData.password!.length > 0 && (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formData.email!)));
 })
 
 function emailValidation(): Array<string> {
@@ -79,30 +72,30 @@ function onsubmit() {
       store.setToken(user.token!);
       store.setUserName(user.name!);
       storeTokenAndUsername(user.token!, user.name!);
-      notifySuccess();
+      notifySuccess("Connexion réalisée avec succès");
+      document.dispatchEvent(new Event('loading'));
       router.push("/admin");
-    }).catch(() => notifyError());
+    }).catch((error) => notifyError(error.response.data.error));
   }
 }
 
 const {init} = useToast();
-
-function notifySuccess() {
-  init({
-    message: "Connexion réalisée avec succès",
-    position: 'top-right',
-    duration: 3000,
-    color: "info",
-  })
+function notifySuccess(message: string) {
+    init({
+        message: message,
+        position: 'top-right',
+        duration: 3000,
+        color: "info",
+    })
 }
 
-function notifyError() {
-  init({
-    message: "Problème rencontré lors de la connexion",
-    position: 'top-right',
-    duration: 3000,
-    color: "danger",
-  })
+function notifyError(error: string) {
+    init({
+        message: error,
+        position: 'top-right',
+        duration: 3000,
+        color: "danger",
+    })
 }
 
 onBeforeMount(() => {

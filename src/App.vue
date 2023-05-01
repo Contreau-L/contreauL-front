@@ -1,11 +1,20 @@
 <template>
   <router-view />
+  <WaveLoader v-if="loading"/>
 </template>
 
 <script setup lang="ts">
 import {useColors} from "vuestic-ui";
+import WaveLoader from "./components/loader/WaveLoader.vue";
+import {ref} from "@vue/reactivity";
 
-useColors().applyPreset("original")
+
+useColors().applyPreset("original");
+const loading = ref(false);
+
+document.addEventListener('loading', () => loading.value = true);
+
+document.addEventListener('stop-loading', () => loading.value = false);
 
 </script>
 

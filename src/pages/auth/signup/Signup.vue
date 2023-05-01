@@ -6,9 +6,9 @@
       class="mb-3"
       type="name"
       :label="t('auth.name')"
-      :error="!!passwordErrors.length"
-      :error-messages="passwordErrors"
-      :input-class=" passwordErrors.length ? 'textError' : ''"
+      :error="!!nameErrors.length"
+      :error-messages="nameErrors"
+      :input-class=" nameErrors.length ? 'textError' : ''"
     />
 
     <va-input
@@ -30,12 +30,6 @@
       :error-messages="passwordErrors"
       :input-class=" passwordErrors.length ? 'textError' : ''"
     />
-
-    <div class="auth-layout__options d-flex align-center justify-space-between">
-      <router-link class="ml-1 va-link" :to="{ name: 'recover-password' }">
-        {{ t('auth.recover_password') }}
-      </router-link>
-    </div>
 
     <div class="d-flex justify-center mt-3">
       <va-button class="my-0" @click="onsubmit" @keyup.enter="onsubmit">{{ t('auth.sign_up') }}</va-button>
@@ -68,7 +62,7 @@ const nameErrors = ref<string[]>([])
 
 
 const formReady = computed(() => {
-  return (formData.name.length > 0 && formData.email!.length > 0 && formData.password!.length > 0)
+  return (formData.name.length > 0 && formData.email!.length > 0 && formData.password!.length > 0 && (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(formData.email!)));
 })
 
 const router = useRouter();
@@ -88,38 +82,38 @@ function onsubmit(): void {
   if (!formReady.value) {
     emailErrors.value = emailValidation();
     passwordErrors.value = formData.password ? [] : ['Le mot de passe est obligatoire'];
-    nameErrors.value = agreedToTerms.value ? [] : ['Le prenom est obligatoire'];
+    nameErrors.value = formData.name ? [] : ['Le prenom est obligatoire'];
   } else {
     signupUser(formData).then((user: UserSignup) => {
       store.setToken(user.token!);
       store.setUserName(user.name);
       storeTokenAndUsername(user.token!, user.name!);
-      notifySuccess();
+      notifySuccess("Inscription réalisée avec succès !");
+      document.dispatchEvent(new Event('loading'));
       router.push("/admin")
-    }).catch(() => {
-      notifyError();
+    }).catch((error) => {
+      notifyError(error.response.data.error);
     })
   }
 }
 
 const {init} = useToast();
-
-function notifySuccess(): void {
-  init({
-    message: "Inscription réalisée avec succès !",
-    position: 'top-right',
-    duration: 3000,
-    color: "info",
-  })
+function notifySuccess(message: string) {
+    init({
+        message: message,
+        position: 'top-right',
+        duration: 3000,
+        color: "info",
+    })
 }
 
-function notifyError(): void {
-  init({
-    message: "Problème rencontré lors de l'inscription !",
-    position: 'top-right',
-    duration: 3000,
-    color: "danger",
-  })
+function notifyError(error: string) {
+    init({
+        message: error,
+        position: 'top-right',
+        duration: 3000,
+        color: "danger",
+    })
 }
 </script>
 

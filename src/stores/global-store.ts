@@ -4,9 +4,10 @@ export const useGlobalStore = defineStore('global', {
   state: () => {
     return {
       isSidebarMinimized: false,
-      userName: 'Vasili S',
+      userName: '',
       token: '',
       api_url: window.API_URL ? window.API_URL : "",
+      devices: []
     }
   },
 
@@ -21,12 +22,19 @@ export const useGlobalStore = defineStore('global', {
 
     setToken(token: string): void {
       this.token = token
+    },
+
+    setDevices(devices: any) {
+      this.devices = devices;
     }
   },
 
   getters:  {
     isTokenAlreadySet(): boolean {
       return this.token.length > 0;
+    },
+    getDevices(): any {
+      return this.devices;
     }
   }
 })
