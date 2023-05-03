@@ -57,8 +57,10 @@
 
   onMounted(() => {
     window.addEventListener('resize', onResize);
-    if (!GlobalStore.isTokenAlreadySet) {
+    if (!GlobalStore.isUserInformationsAlreadySet) {
       useRouter().push('/auth');
+    } else {
+
     }
   })
 

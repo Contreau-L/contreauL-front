@@ -19,17 +19,17 @@ export default {
       },
     },
     {
-      name: 'statistics',
-      displayName: 'menu.statistics',
-      meta: {
-        icon: 'vuestic-iconset-statistics',
-      },
-    },
-    {
       name: 'settings',
       displayName: 'menu.settings',
       meta: {
         icon: 'vuestic-iconset-forms',
+      },
+    },
+    {
+      name: 'statistics',
+      displayName: 'menu.statistics',
+      meta: {
+        icon: 'vuestic-iconset-statistics',
       },
     },
     {

@@ -100,12 +100,7 @@ function notifyError(error: string) {
 }
 
 onBeforeMount(() => {
-  if (!useGlobalStore().isTokenAlreadySet) {
-    if (getUsername() && getToken() && getUserId()) {
-      store.setUserName(getUsername()!);
-      store.setToken(getToken()!)
-      store.setUserId(getUserId()!)
-    } else
+  if (!useGlobalStore().isUserInformationsAlreadySet) {
       return
   }
   useRouter().push('/admin');

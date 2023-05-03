@@ -8,6 +8,6 @@ export function signupUser(user: UserSignup): Promise<any> {
     password: user.password,
     email: user.email
   }).then((response: AxiosResponse<any>) => {
-    return {name: response.data.name, token: response.data.token};
+    return {name: response.data.name, token: response.data.token, id: response.data.id};
   })
 }

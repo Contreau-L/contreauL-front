@@ -7,7 +7,6 @@ export default {
   colors: {
     presets: {
       original: {
-        textInverted: "black",
         textPrimary: "#F1F1F1",
         backgroundBorder: "#3D4C58",
         backgroundElement: "#131A22",

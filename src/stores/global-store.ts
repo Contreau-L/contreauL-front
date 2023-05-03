@@ -1,4 +1,5 @@
 import { defineStore } from 'pinia'
+import {getToken, getUserId, getUsername} from "../utils/cookieManagement";
 
 export const useGlobalStore = defineStore('global', {
   state: () => {
@@ -7,8 +8,11 @@ export const useGlobalStore = defineStore('global', {
       userName: '',
       token: '',
       userId: '',
+      userHasNoDevice: true,
       api_url: window.API_URL ? window.API_URL : "",
-      devices: []
+      devices: [],
+      selectedDevice: {},
+      gardenLines: []
     }
   },
 
@@ -38,8 +42,27 @@ export const useGlobalStore = defineStore('global', {
     isTokenAlreadySet(): boolean {
       return this.token.length > 0;
     },
-    getDevices(): any {
-      return this.devices;
-    }
+    isUserInformationsAlreadySet(): boolean {
+      if(this.token.length === 0) {
+        if (getUsername() && getToken() && getUserId()) {
+          this.userName = getUsername()!;
+          this.token = getToken()!;
+          this.userId = getUserId()!;
+          return true;
+        }
+        return false;
+      }
+      return true;
+    },
+    getDevices(): Promise<any> {
+      if (this.devices.length > 0 && !this.userHasNoDevice)
+        return Promise.resolve(this.devices);
+      return Promise.reject();
+    },
+    getGardenLines(): Promise<any> {
+      if (this.gardenLines.length > 0)
+        return Promise.resolve(this.gardenLines);
+      return Promise.reject();
+    },
   }
 })

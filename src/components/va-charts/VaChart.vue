@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="ts">
-  import { computed, ref } from 'vue'
+import {computed, ref, watch} from 'vue'
   import type { TChartOptions } from 'vue-chartjs/dist/types'
   import { defaultConfig, chartTypesMap } from './vaChartConfigs'
   import { TChartData } from '../../data/types'

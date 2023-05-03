@@ -1,9 +1,6 @@
 <template>
     <div class="dashboard">
-        <dashboard-charts/>
-
         <dashboard-info-block/>
-
         <div class="row row-equal">
             <div class="flex xs12 lg6">
                 <dashboard-tabs @submit="addAddressToMap"/>
@@ -17,10 +14,9 @@
 </template>
 
 <script setup lang="ts">
-import {onMounted, ref} from 'vue';
+import {ref} from 'vue';
 
 
-import DashboardCharts from './DashboardCharts.vue'
 import DashboardInfoBlock from './DashboardInfoBlock.vue'
 import DashboardTabs from './DashboardTabs.vue'
 import DashboardMap from './DashboardMap.vue'
@@ -34,13 +30,6 @@ const router = useRouter();
 function addAddressToMap({city, country}: { city: { text: string }; country: string }) {
     dashboardMap.value.addAddress({city: city.text, country})
 }
-
-onMounted(() => {
-    if (store.devices.length < 1) {
-        document.dispatchEvent(new Event('stop-loading'));
-        // router.push('/settings')
-    }
-});
 </script>
 
 <style lang="scss">

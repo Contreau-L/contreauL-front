@@ -1,96 +1,137 @@
 <template>
-  <div class="charts">
-    <div class="row">
-      <div class="flex md6 xs12">
-        <va-card v-if="barChartDataGenerated" class="chart-widget">
-          <va-card-title>{{ t('charts.verticalBarChart') }}</va-card-title>
-          <va-card-content>
-            <va-chart :data="barChartDataGenerated" type="bar" />
-          </va-card-content>
-        </va-card>
-      </div>
-
-      <div class="flex md6 xs12">
-        <va-card v-if="horizontalBarChartDataGenerated" class="chart-widget">
-          <va-card-title>{{ t('charts.horizontalBarChart') }}</va-card-title>
-          <va-card-content>
-            <va-chart :data="horizontalBarChartDataGenerated" type="horizontal-bar" />
-          </va-card-content>
-        </va-card>
-      </div>
+    <div class="charts">
+        <div class="row" v-if="levels.length">
+            <div class="flex md12 xs12">
+                <va-card  class="chart-widget">
+                    <va-card-title>Niveau de la réserve d'eau</va-card-title>
+                    <va-card-content>
+                        <va-chart :data="levelsChart" type="line"/>
+                    </va-card-content>
+                </va-card>
+            </div>
+        </div>
+        <div class="row" v-if="temperatures.length">
+            <div class="flex md12 xs12">
+                <va-card class="chart-widget">
+                    <va-card-title>Température de la réserve d'eau</va-card-title>
+                    <va-card-content>
+                        <va-chart :data="temperaturesChart" type="line"/>
+                    </va-card-content>
+                </va-card>
+            </div>
+        </div>
+        <div class="row" v-if="phs.length">
+            <div class="flex md12 xs12">
+                <va-card class="chart-widget">
+                    <va-card-title>Ph de la réserve d'eau</va-card-title>
+                    <va-card-content>
+                        <va-chart :data="phsChart" type="line"/>
+                    </va-card-content>
+                </va-card>
+            </div>
+        </div>
     </div>
-
-    <div class="row">
-      <div class="flex md12 xs12">
-        <va-card v-if="lineChartDataGenerated" class="chart-widget">
-          <va-card-title>{{ t('charts.lineChart') }}</va-card-title>
-          <va-card-content>
-            <va-chart :data="lineChartDataGenerated" type="line" />
-          </va-card-content>
-        </va-card>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="flex md6 xs12">
-        <va-card v-if="pieChartDataGenerated" class="chart-widget">
-          <va-card-title>{{ t('charts.pieChart') }}</va-card-title>
-          <va-card-content>
-            <va-chart :data="pieChartDataGenerated" type="pie" />
-          </va-card-content>
-        </va-card>
-      </div>
-
-      <div class="flex md6 xs12">
-        <va-card v-if="doughnutChartDataGenerated" class="chart-widget">
-          <va-card-title>{{ t('charts.donutChart') }}</va-card-title>
-          <va-card-content>
-            <va-chart :data="doughnutChartDataGenerated" type="doughnut" />
-          </va-card-content>
-        </va-card>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="flex md12 xs12">
-        <va-card v-if="bubbleChartDataGenerated" class="chart-widget">
-          <va-card-title>{{ t('charts.bubbleChart') }}</va-card-title>
-          <va-card-content>
-            <va-chart :data="bubbleChartDataGenerated" type="bubble" />
-          </va-card-content>
-        </va-card>
-      </div>
-    </div>
-  </div>
 </template>
 
-<script setup lang="ts">
-  import { useI18n } from 'vue-i18n'
-  import { useChartData } from '../../../../data/charts/composables/useChartData'
-  import {
-    lineChartData,
-    doughnutChartData,
-    bubbleChartData,
-    pieChartData,
-    barChartData,
-    horizontalBarChartData,
-  } from '../../../../data/charts'
-  import VaChart from '../../../../components/va-charts/VaChart.vue'
+<script lang="ts" setup>
+import {useI18n} from 'vue-i18n'
+import VaChart from '../../../../components/va-charts/VaChart.vue'
+import {onMounted, ref, watch} from "vue";
+import {lastMonthLogs} from "../service/StatisticsService";
+import {useGlobalStore} from "../../../../stores/global-store";
 
-  const lineChartDataGenerated = useChartData(lineChartData, 0.7)
-  const doughnutChartDataGenerated = useChartData(doughnutChartData)
-  const bubbleChartDataGenerated = useChartData(bubbleChartData, 0.9)
-  const pieChartDataGenerated = useChartData(pieChartData)
-  const barChartDataGenerated = useChartData(barChartData)
-  const horizontalBarChartDataGenerated = useChartData(horizontalBarChartData)
 
-  const { t } = useI18n()
+const {t} = useI18n();
+
+const labels = ref([]);
+const levels = ref([]);
+const temperatures = ref([]);
+const phs = ref([]);
+
+function loadLabels(newLabels: Array<any>) {
+    labels.value = [];
+    newLabels.forEach((label) => labels.value.push(new Date(label).toLocaleDateString()));
+}
+
+const levelsChart = ref({});
+const temperaturesChart = ref({});
+const phsChart = ref({});
+
+function loadLevelsChart() {
+    levelsChart.value = {
+        labels: labels.value,
+        datasets: [
+            {
+                label: "Evolution du niveau de la réserve d'eau",
+                backgroundColor: 'primary',
+                data: levels.value,
+            }
+        ],
+    }
+}
+
+function loadTemperaturesChart() {
+    temperaturesChart.value = {
+        labels: labels.value,
+        datasets: [
+            {
+                label: "Evolution de la temperature de la réserve d'eau",
+                backgroundColor: 'primary',
+                data: temperatures.value,
+            }
+        ],
+    }
+}
+
+function loadPhsChart() {
+    phsChart.value = {
+        labels: labels.value,
+        datasets: [
+            {
+                label: "Evolution du ph de la réserve d'eau",
+                backgroundColor: 'primary',
+                data: phs.value,
+            }
+        ],
+    }
+}
+
+function loadLastMonthLogs() {
+    lastMonthLogs().then((response) => {
+        levels.value = response.levels;
+        temperatures.value = response.temperatures;
+        phs.value = response.phs;
+        loadLabels(response.times.reverse());
+        loadLevelsChart();
+        loadTemperaturesChart();
+        loadPhsChart();
+    })
+}
+
+const store = useGlobalStore();
+
+watch(() => store.selectedDevice, () => {
+    lastMonthLogs().then((response) => {
+        levels.value = response.levels;
+        temperatures.value = response.temperatures;
+        phs.value = response.phs;
+        loadLabels(response.times.reverse());
+        loadLevelsChart();
+        loadTemperaturesChart();
+        loadPhsChart();
+    })
+})
+onMounted(() => {
+    setTimeout(() => {
+        loadLastMonthLogs();
+    }, 300);
+})
 </script>
 
 <style lang="scss">
-  .chart-widget {
-    .va-card__content {
-      height: 450px;
-    }
+.chart-widget {
+  .va-card__content {
+    height: 450px;
   }
+}
 </style>

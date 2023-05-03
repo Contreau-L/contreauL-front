@@ -6,7 +6,7 @@
                 <form>
                     <div class="row">
                         <div class="flex md4 sm6 xs12">
-                            <va-input v-model="deviceId" placeholder="Adresse mac de votre appareil">
+                            <va-input label="Adresse mac de votre appareil" v-model="deviceId" placeholder="464654318">
                                 <template #append>
                                     <va-button style="margin-right: 0" @click="submit"> Associer </va-button>
                                 </template>
@@ -22,7 +22,7 @@
 <script lang="ts" setup>
 import {ref} from "vue";
 import { useI18n } from 'vue-i18n'
-import {deviceAttachmentToUser} from "../services/SettingsService";
+import {deviceAttachmentToUser, refreshDevicesList} from "../services/SettingsService";
 import {useGlobalStore} from "../../../../stores/global-store";
 import {useToast} from "vuestic-ui";
 
@@ -35,7 +35,9 @@ function submit() {
     if (deviceId.value !== "")
         deviceAttachmentToUser(deviceId.value, store.userId).then((message: string) => {
             notifySuccess(message);
+            refreshDevicesList();
             deviceId.value = "";
+            document.dispatchEvent(new Event('update-device'));
         }).catch((error) => {
             notifyError(error.response.data.error);
         })
