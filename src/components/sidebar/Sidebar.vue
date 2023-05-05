@@ -6,10 +6,12 @@
 </template>
 
 <script setup lang="ts">
-  import { ref } from 'vue'
+import {onMounted, ref, watch} from 'vue'
   import NavigationRoutes from './NavigationRoutes'
+  import NavigationRoutesWithoutDevice from "./NavigationRoutesWithoutDevice";
   import MenuAccordion from './menu/MenuAccordion.vue'
   import MenuMinimized from './menu/MenuMinimized.vue'
+  import {useGlobalStore} from "../../stores/global-store";
 
   withDefaults(
     defineProps<{
@@ -29,6 +31,21 @@
   )
 
   const items = ref(NavigationRoutes.routes)
+  const store = useGlobalStore();
+
+  watch(() => store.devices, () => {
+      if (store.devices.length > 0)
+          items.value = NavigationRoutes.routes;
+      else
+          items.value = NavigationRoutesWithoutDevice.routes;
+  })
+
+onMounted(() => {
+    if (store.devices.length > 0)
+        items.value = NavigationRoutes.routes;
+    else
+        items.value = NavigationRoutesWithoutDevice.routes;
+})
 </script>
 
 <style lang="scss">

@@ -12,25 +12,11 @@ export default {
   },
   routes: [
     {
-      name: 'dashboard',
-      displayName: 'menu.dashboard',
-      meta: {
-        icon: 'vuestic-iconset-dashboard',
-      },
-    },
-    {
       name: 'settings',
       displayName: 'menu.settings',
       meta: {
         icon: 'vuestic-iconset-settings',
       },
-    },
-    {
-      name: 'statistics',
-      displayName: 'menu.statistics',
-      meta: {
-        icon: 'vuestic-iconset-statistics',
-      },
-    },
+    }
   ] as INavigationRoute[],
 }

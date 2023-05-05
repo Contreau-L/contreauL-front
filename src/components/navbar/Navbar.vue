@@ -39,6 +39,7 @@ import VuesticLogo from '../VuesticLogo.vue'
 import VaIconMenuCollapsed from '../icons/VaIconMenuCollapsed.vue'
 import AppNavbarActions from './components/AppNavbarActions.vue'
 import {loadDevicesList} from "../../pages/admin/forms/services/SettingsService";
+import {useRouter} from "vue-router";
 
 const GlobalStore = useGlobalStore();
 const {t} = useI18n()
@@ -82,9 +83,15 @@ document.addEventListener('update-device', () => {
     }, 200);
 })
 
+const router = useRouter();
+
 function loadDevices() {
     document.dispatchEvent(new Event('loading'));
     loadDevicesList().then((devicesFound) => {
+        if (devicesFound.length === 0) {
+            document.dispatchEvent(new Event('stop-loading'));
+            router.push('/admin/settings');
+        }
         devices.value = devicesFound;
         fillSelectOptions();
         document.dispatchEvent(new Event('stop-loading'));
@@ -92,6 +99,7 @@ function loadDevices() {
 }
 
 onMounted(() => {
+    document.dispatchEvent(new Event('loading'));
     setTimeout(() => {
         loadDevices();
     }, 100);

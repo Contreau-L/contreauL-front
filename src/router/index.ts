@@ -28,13 +28,8 @@ const routes: Array<RouteRecordRaw> = [
       {
         name: 'statistics',
         path: 'statistics',
-        component: () => import('../pages/admin/statistics/charts/Charts.vue'),
-      },
-      {
-        name: 'tables',
-        path: 'tables',
-        component: () => import('../pages/admin/tables/markup-tables/MarkupTables.vue'),
-      },
+        component: () => import('../pages/admin/statistics/Statistics.vue'),
+      }
     ],
   },
   {

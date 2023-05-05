@@ -35,10 +35,10 @@
 
 <script lang="ts" setup>
 import {useI18n} from 'vue-i18n'
-import VaChart from '../../../../components/va-charts/VaChart.vue'
+import VaChart from '../../../components/va-charts/VaChart.vue'
 import {onMounted, ref, watch} from "vue";
-import {lastMonthLogs} from "../service/StatisticsService";
-import {useGlobalStore} from "../../../../stores/global-store";
+import {lastMonthLogs} from "./service/StatisticsService";
+import {useGlobalStore} from "../../../stores/global-store";
 
 
 const {t} = useI18n();
@@ -63,7 +63,7 @@ function loadLevelsChart() {
         datasets: [
             {
                 label: "Evolution du niveau de la réserve d'eau",
-                backgroundColor: 'primary',
+                backgroundColor: '#2c82e0',
                 data: levels.value,
             }
         ],
@@ -76,7 +76,7 @@ function loadTemperaturesChart() {
         datasets: [
             {
                 label: "Evolution de la temperature de la réserve d'eau",
-                backgroundColor: 'primary',
+                backgroundColor: '#e42222',
                 data: temperatures.value,
             }
         ],
@@ -89,7 +89,7 @@ function loadPhsChart() {
         datasets: [
             {
                 label: "Evolution du ph de la réserve d'eau",
-                backgroundColor: 'primary',
+                backgroundColor: '#3d9209',
                 data: phs.value,
             }
         ],
@@ -111,15 +111,7 @@ function loadLastMonthLogs() {
 const store = useGlobalStore();
 
 watch(() => store.selectedDevice, () => {
-    lastMonthLogs().then((response) => {
-        levels.value = response.levels;
-        temperatures.value = response.temperatures;
-        phs.value = response.phs;
-        loadLabels(response.times.reverse());
-        loadLevelsChart();
-        loadTemperaturesChart();
-        loadPhsChart();
-    })
+    loadLastMonthLogs();
 })
 onMounted(() => {
     setTimeout(() => {

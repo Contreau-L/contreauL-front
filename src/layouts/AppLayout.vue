@@ -59,8 +59,6 @@
     window.addEventListener('resize', onResize);
     if (!GlobalStore.isUserInformationsAlreadySet) {
       useRouter().push('/auth');
-    } else {
-
     }
   })
 
