@@ -69,6 +69,7 @@ function onsubmit() {
     passwordErrors.value = formData.password ? [] : ['Le mot de passe est obligatoire']
   } else {
     loginUser(formData).then((user: UserLogin) => {
+      store.selectedDevice = {};
       store.setToken(user.token!);
       store.setUserName(user.name!);
       store.setUserId(user.id!);

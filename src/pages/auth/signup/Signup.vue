@@ -85,6 +85,7 @@ function onsubmit(): void {
     nameErrors.value = formData.name ? [] : ['Le prenom est obligatoire'];
   } else {
     signupUser(formData).then((user: UserSignup) => {
+      store.selectedDevice = {};
       store.setToken(user.token!);
       store.setUserName(user.name);
       store.setUserId(user.id!);

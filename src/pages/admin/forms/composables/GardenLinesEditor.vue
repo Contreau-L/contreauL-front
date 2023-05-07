@@ -134,6 +134,7 @@ onMounted(() => {
     display: flex;
     margin-left: 0.7rem;
     column-gap: 1rem;
+    flex-wrap: wrap;
 }
 
 .data-input {

@@ -46,6 +46,7 @@ export const useGlobalStore = defineStore('global', {
       if(this.token.length === 0) {
         if (getUsername() && getToken() && getUserId()) {
           this.userName = getUsername()!;
+          console.log( getUsername())
           this.token = getToken()!;
           this.userId = getUserId()!;
           return true;

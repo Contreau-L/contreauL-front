@@ -1,5 +1,5 @@
 <template>
-    <div class="dashboard">
+    <div class="dashboard" v-if="isOneDeviceSelected">
         <div class="info-actions-container">
             <div class="info-container">
                 <dashboard-info-block/>
@@ -10,8 +10,8 @@
         </div>
 
         <div class="row row-equal">
-                <DashboardLogsTables/>
-                <DashboardActionsTables/>
+            <DashboardLogsTables/>
+            <DashboardActionsTables/>
         </div>
     </div>
 </template>
@@ -24,11 +24,24 @@ import {useRouter} from "vue-router";
 import DashboardLogsTables from "./DashboardLogsTables.vue";
 import DashboardActionsTables from "./DashboardActionsTables.vue";
 import DashboardActionBlocks from "./DashboardActionBlocks.vue";
-import {onMounted} from "vue";
+import {onMounted, watch} from "vue";
 import {loadDevicesList} from "../forms/services/SettingsService";
+import {ref} from "@vue/reactivity";
 
 const store = useGlobalStore();
 const router = useRouter();
+
+const isOneDeviceSelected = ref(false);
+
+watch(() => store.selectedDevice, () => {
+    isOneDeviceSelected.value = store.selectedDevice.idMac ? true : false;
+})
+
+onMounted(() => {
+    setTimeout(() => {
+        isOneDeviceSelected.value = store.selectedDevice.idMac ? true : false;
+    }, 100);
+})
 
 onMounted(() => {
     setTimeout(() => {
@@ -60,11 +73,22 @@ onMounted(() => {
   display: flex;
   flex-direction: row;
   column-gap: 1%;
+
   .info-container {
     width: 49.5%;
+      margin-right: 0.4rem;
   }
+
   .actions-container {
     width: 49.5%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+      .va-card {
+          width: 100% !important;
+      }
   }
 }
 </style>

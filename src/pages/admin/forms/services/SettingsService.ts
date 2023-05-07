@@ -28,9 +28,12 @@ export function loadDevicesList() {
 
 export function loadGardenLinesList() {
     const store = useGlobalStore();
-    return store.getGardenLines.then((devices) => devices).catch(() => {
-        return gardenLinesListFromDevice(store.selectedDevice.idMac);
-    })
+    if (store.selectedDevice.idMac)
+        return store.getGardenLines.then((devices) => devices).catch(() => {
+            return gardenLinesListFromDevice(store.selectedDevice.idMac);
+        })
+    else
+        Promise.reject("No device selected !");
 }
 
 export function refreshDevicesList() {
@@ -63,10 +66,13 @@ export function updateGardenLine(lineId: string, type: string, threshold: string
 
 export function gardenLinesListFromDevice(deviceId: string) {
     const store = useGlobalStore();
-    return axios.get(getGardenLinesListUrl(deviceId)).then((response) => {
-        store.gardenLines = response.data.lines;
-        return response.data.lines;
-    })
+    if (store.selectedDevice.idMac)
+        return axios.get(getGardenLinesListUrl(deviceId)).then((response) => {
+            store.gardenLines = response.data.lines;
+            return response.data.lines;
+        })
+    else
+        Promise.reject("No device selected !");
 }
 
 

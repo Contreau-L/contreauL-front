@@ -8,9 +8,9 @@
         </span>
             </template>
             <va-dropdown-content class="profile-dropdown__content">
-                <va-list-item v-for="option in options" :key="option.name" class="pa-2">
+                  <va-list-item v-for="option in options" :key="option.name" class="pa-2">
           <span @click="logoutUser()" class="profile-dropdown__item">
-            {{ t(`user.${option.name}`) }}
+            Déconnexion
           </span>
                 </va-list-item>
             </va-dropdown-content>
@@ -55,9 +55,9 @@ const logoutUser = () => {
     store.setToken('')
     store.setUserId('');
     store.devices = [];
-    store.selectedDevice = {};
+    // store.selectedDevice = {};
     store.gardenLines = [];
-    router.push('/auth')
+    router.push('/auth');
 }
 </script>
 

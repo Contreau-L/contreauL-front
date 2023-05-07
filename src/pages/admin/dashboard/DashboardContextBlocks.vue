@@ -93,7 +93,7 @@ function loadContext() {
         context.level = newContext.water_level;
         context.temperature = newContext.water_temperature;
         context.ph = newContext.ph;
-        context.lastLog = context.lastLog ? new Date(newContext.occurred_at).toLocaleString() : 'En attente';
+        context.lastLog = newContext.occurred_at ? new Date(newContext.occurred_at).toLocaleString() : 'En attente';
         context.lastConnexion = newContext.last_connexion ? new Date(newContext.last_connexion).toLocaleString() : 'En attente';
         refreshInfo();
     })

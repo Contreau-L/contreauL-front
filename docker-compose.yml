@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  contreaul:
+    build: .
+    container_name: front
+    networks:
+      - contreaul-net
+    ports:
+      - "3000:3000"
+
+networks:
+  contreaul-net:
+    name: database_contreaul-net
+    external: true

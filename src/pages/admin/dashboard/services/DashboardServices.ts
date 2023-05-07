@@ -1,5 +1,12 @@
 import axios from "axios";
-import {getDeviceContextUrl, getDeviceLastActionsUrl, getDeviceLastLogsUrl} from "./url";
+import {
+    getActionGenerationUrl,
+    getAllActionGenerationUrl,
+    getDeviceContextUrl,
+    getDeviceLastActionsUrl,
+    getDeviceLastLogsUrl,
+    getGardenLinesStatusUpdateUrl
+} from "./url";
 import {useGlobalStore} from "../../../../stores/global-store";
 
 export function deviceContext(){
@@ -31,3 +38,51 @@ export function deviceLastActions(){
     else
         return Promise.reject({});
 }
+
+export function generateActionsOnAllLines() {
+    const store = useGlobalStore();
+    if (store.selectedDevice.idMac)
+        return axios.post(getAllActionGenerationUrl(store.selectedDevice.idMac)).then((response) => {
+            return response.data.message;
+        })
+    else
+        return Promise.reject({});
+}
+
+export function setAllLinesStatusToFalse() {
+    const store = useGlobalStore();
+    let promisesList: any[] = [];
+    store.gardenLines.forEach((line) => {
+        promisesList.push(axios.post(getGardenLinesStatusUpdateUrl(line.id, "false")))
+    });
+    return Promise.all(promisesList);
+}
+
+export function setAllLinesStatusToTrue() {
+    const store = useGlobalStore();
+    let promisesList: any[] = [];
+    store.gardenLines.forEach((line) => {
+        promisesList.push(axios.post(getGardenLinesStatusUpdateUrl(line.id, "true")))
+    });
+    return Promise.all(promisesList);
+}
+
+export function setLineStatusToTrue(lineId: string) {
+        return axios.post(getGardenLinesStatusUpdateUrl(lineId, "true")).then((response) => {
+            return response.data.message;
+        })
+}
+
+export function setLineStatusToFalse(lineId: string) {
+    return axios.post(getGardenLinesStatusUpdateUrl(lineId, "false")).then((response) => {
+        return response.data.message;
+    })
+}
+
+export function generateActionOnLine(lineId: string) {
+    const store = useGlobalStore();
+    return axios.post(getActionGenerationUrl(store.selectedDevice.idMac, lineId)).then((response) => {
+        return response.data.message;
+    });
+}
+

@@ -60,6 +60,10 @@ watch(() => store.selectedDevice, () => {
     loadLastActions();
 })
 
+document.addEventListener('refresh-actions', () => {
+    loadLastActions();
+})
+
 function loadLastActions() {
     deviceLastActions().then((response) => {
         actions.value = response;

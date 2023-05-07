@@ -70,6 +70,10 @@ watch(actualDevice, (newValue) => {
     GlobalStore.selectedDevice = devices.value[findDeviceIndex(newValue)];
 })
 
+watch(() => GlobalStore.userName, () => {
+    userName.value = GlobalStore.userName;
+})
+
 function findDeviceIndex(device: string) {
     const deviceId = device.split(" - ")[1];
     const index = devices.value.findIndex((device) => device.idMac === deviceId);
