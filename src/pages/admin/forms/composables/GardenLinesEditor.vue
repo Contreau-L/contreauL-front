@@ -15,7 +15,7 @@
                             <va-input class="data-input" label="Type de végétation" v-model="formData.type"
                                       placeholder="Carotte, rose...">
                             </va-input>
-                            <va-input type="number" step=".01" class="data-input" label="Seuil d'humidité"
+                            <va-input type="number" step="1" class="data-input" label="Seuil d'humidité"
                                       v-model="formData.threshold" placeholder="0.38">
                             </va-input>
                             <va-button style="margin-right: 0" @click="submit"> Modifier</va-button>
@@ -52,7 +52,7 @@ const lines = ref([]);
 const selectedDevice = ref(store.selectedDevice);
 
 function submit() {
-    updateGardenLine(lines.value[parseInt(actualGardenLine.value) - 1].id, formData.type, formData.threshold).then((message: string) => {
+    updateGardenLine(lines.value[parseInt(actualGardenLine.value) - 1].id, formData.type, formData.threshold.toString()).then((message: string) => {
         notifySuccess(message);
         gardenLinesListFromDevice(store.selectedDevice.idMac);
         loadLines();
