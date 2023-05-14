@@ -28,11 +28,11 @@ import {useToast} from "vuestic-ui";
 
 const { t } = useI18n()
 const store = useGlobalStore();
-const deviceId = ref();
+const deviceId = ref("");
 
 
 function submit() {
-    if (deviceId.value !== "")
+    if (isDeviceIdValid())
         deviceAttachmentToUser(deviceId.value, store.userId).then((message: string) => {
             notifySuccess(message);
             refreshDevicesList();
@@ -41,6 +41,12 @@ function submit() {
         }).catch((error) => {
             notifyError(error.response.data.error);
         })
+    else
+        notifyError("Adresse mac renseignée invalide ! ");
+}
+
+function isDeviceIdValid(){
+    return deviceId.value !== "" && !isNaN(parseInt(deviceId.value))
 }
 
 const {init} = useToast();

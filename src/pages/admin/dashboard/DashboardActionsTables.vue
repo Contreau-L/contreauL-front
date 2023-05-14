@@ -66,7 +66,7 @@ document.addEventListener('refresh-actions', () => {
 
 function loadLastActions() {
     deviceLastActions().then((response) => {
-        actions.value = response;
+        actions.value = response.slice(0, 10);
     })
 }
 
