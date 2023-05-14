@@ -75,7 +75,7 @@ function refreshInfo() {
         },
         {
             color: 'success',
-            value: context.ph ? context.temperature : 0,
+            value: context.ph ? context.ph : 0,
             text: 'ph de la réserve',
             icon: '',
         },
